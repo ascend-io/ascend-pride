@@ -1,0 +1,14 @@
+component:
+  read:
+    connection: read_gcs_lake
+    gcs:
+      path: /pride/cleaned_lgbtq_films.csv
+      parser: csv
+  tests:
+    component:
+      - count_greater_than:
+          count: 0
+    columns:
+      original_title:
+        - not_null
+  description: "Reads cleaned LGBTQ films data from GCS."

@@ -1,0 +1,16 @@
+component:
+  read:
+    connection: read_gcs_lake
+    gcs:
+      path: /pride/genres.csv
+      parser: csv
+  tests:
+    component:
+      - count_greater_than:
+          count: 0
+    columns:
+      id:
+        - not_null
+      name:
+        - not_null
+  description: "Reads genre data that can be joined to the main table."

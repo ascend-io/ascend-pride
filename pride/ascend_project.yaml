@@ -1,0 +1,36 @@
+project:
+  # only alphanumeric characters, dashes, and underscores are allowed for the Project name
+  name: pride
+  # additional packages to install from PyPI
+  # https://pypi.org/project/ottos-expeditions/
+  # you can use a Flow bootstrap command to install private packages
+  pip_packages:
+    - ibis
+    - polars
+    - seaborn
+    - scikit-learn
+  # in Ascend, Parameters are a core concept.
+  # Think of parameters as a key:value mapping (dictionary, map, etc.) of variables
+  # you can use in your Flows. The hierarchy of parameters is:
+  # Project > Profile > Flow > Flow Run.
+  # The Parameters below are the top-level variables -- you can think of them as a default
+  # -- for all Flows in this project. Profiles are typically used to override Parameters
+  parameters:
+    data_planes:
+      snowflake:
+        account: ASCENDPARTNER
+        user: ASCEND_PRIDE_DEV
+        role: ASCEND_PRIDE_DEV
+        warehouse: ASCEND_PRIDE_DEV
+        database: ASCEND_PRIDE_DEV
+        schema: DEFAULT
+        max_concurrent_queries: 20
+  # defaults are typically used to specify the default Data Plane Connection
+  # used for Flows, specified by a regex pattern on the Flow name
+  defaults:
+    - kind: Flow
+      name:
+        regex: .*
+      spec:
+        data_plane:
+          connection_name: data_plane_snowflake

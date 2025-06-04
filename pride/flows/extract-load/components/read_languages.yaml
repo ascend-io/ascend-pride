@@ -1,0 +1,14 @@
+component:
+  read:
+    connection: read_gcs_lake
+    gcs:
+      path: /pride/languages.csv
+      parser: csv
+  tests:
+    component:
+      - count_greater_than:
+          count: 0
+    columns:
+      English:
+        - not_null
+  description: "Reads language codes mapping table from GCS."
