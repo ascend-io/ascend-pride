@@ -98,4 +98,31 @@ def map_genres(read_films, read_genres, context: ComponentExecutionContext):
         pl.col("genre_name").fill_null(pl.lit([], dtype=pl.List(pl.Utf8)))
     )
 
-    return films_df.to_pandas()
+    # Ensure output DataFrame always has the expected columns, even if empty
+    expected_columns = [
+        "OVERVIEW", "RELEASE_DATE", "ORIGINAL_TITLE", "GENRE_IDS", "genre_ids", "genre_name"
+    ]
+    # Add any missing columns as empty columns
+    for col in expected_columns:
+        if col not in films_df.columns:
+            # Use empty string or empty list as appropriate
+            if col == "genre_name":
+                films_df = films_df.with_columns(pl.lit([], dtype=pl.List(pl.Utf8)).alias(col))
+            elif col == "genre_ids":
+                films_df = films_df.with_columns(pl.lit([], dtype=pl.List(pl.Int64)).alias(col))
+            else:
+                films_df = films_df.with_columns(pl.lit(None).alias(col))
+
+    # Reorder columns to match expected order
+    films_df = films_df.select([col for col in expected_columns if col in films_df.columns])
+
+    # Convert to pandas and ensure columns are present even if empty
+    result_df = films_df.to_pandas()
+    for col in expected_columns:
+        if col not in result_df.columns:
+            if col == "genre_name":
+                result_df[col] = [[]] * len(result_df)
+            else:
+                result_df[col] = None
+
+    return result_df
