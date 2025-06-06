@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LGBTQ Films: Temporal Analysis</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #faf5ff 0%, #fdf2f8 100%);
+            min-height: 100vh;
+            color: #374151;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+
+        .header p {
+            font-size: 1.125rem;
+            color: #6b7280;
+            max-width: 48rem;
+            margin: 0 auto;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid;
+        }
+
+        .stat-card.purple { border-left-color: #8b5cf6; }
+        .stat-card.pink { border-left-color: #ec4899; }
+        .stat-card.blue { border-left-color: #3b82f6; }
+
+        .stat-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .number.purple { color: #8b5cf6; }
+        .stat-card .number.pink { color: #ec4899; }
+        .stat-card .number.blue { color: #3b82f6; }
+
+        .stat-card .description {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        .chart-section {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .chart-section h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-bottom: 1rem;
+        }
+
+        .chart-container.small {
+            height: 300px;
+        }
+
+        .phases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .phase-card {
+            text-align: center;
+            padding: 1rem;
+            background: linear-gradient(to bottom, #f3e8ff, #fce7f3);
+            border-radius: 0.5rem;
+        }
+
+        .phase-card h3 {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .phase-card .years {
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+        }
+
+        .phase-card .count {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #8b5cf6;
+            margin-bottom: 0.25rem;
+        }
+
+        .phase-card .label {
+            font-size: 0.625rem;
+            color: #9ca3af;
+        }
+
+        .findings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .findings-section h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .findings-section h3.purple { color: #8b5cf6; }
+        .findings-section h3.pink { color: #ec4899; }
+
+        .findings-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .findings-section li {
+            margin-bottom: 0.5rem;
+            color: #374151;
+            line-height: 1.5;
+        }
+
+        .findings-section strong {
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .findings-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>LGBTQ Films: Temporal Analysis (1880s-2022)</h1>
+            <p>Exploring trends in LGBTQ film production across decades, years, and seasonal patterns</p>
+        </div>
+
+        <!-- Key Stats -->
+        <div class="stats-grid">
+            <div class="stat-card purple">
+                <h3>Exponential Growth</h3>
+                <div class="number purple">2.7x</div>
+                <div class="description">increase from 2000s to 2010s decade</div>
+            </div>
+            <div class="stat-card pink">
+                <h3>Peak Year</h3>
+                <div class="number pink">2020</div>
+                <div class="description">348 films - highest single year</div>
+            </div>
+            <div class="stat-card blue">
+                <h3>Peak Release Month</h3>
+                <div class="number blue">January</div>
+                <div class="description">Peak month (618 films total)</div>
+            </div>
+        </div>
+
+        <!-- Yearly Trend Chart -->
+        <div class="chart-section">
+            <h2>Yearly Film Production (1960-2022)</h2>
+            <div class="chart-container">
+                <canvas id="yearlyChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Decade Chart -->
+        <div class="chart-section">
+            <h2>Films by Decade</h2>
+            <div class="chart-container small">
+                <canvas id="decadeChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Historical Phases -->
+        <div class="chart-section">
+            <h2>Historical Phases of LGBTQ Cinema</h2>
+            <div class="phases-grid">
+                <div class="phase-card">
+                    <h3>Early Era</h3>
+                    <div class="years">1882-1960</div>
+                    <div class="count">41</div>
+                    <div class="label">films</div>
+                </div>
+                <div class="phase-card">
+                    <h3>Civil Rights Era</h3>
+                    <div class="years">1961-1980</div>
+                    <div class="count">287</div>
+                    <div class="label">films</div>
+                </div>
+                <div class="phase-card">
+                    <h3>AIDS Crisis Era</h3>
+                    <div class="years">1981-1995</div>
+                    <div class="count">325</div>
+                    <div class="label">films</div>
+                </div>
+                <div class="phase-card">
+                    <h3>Modern Era</h3>
+                    <div class="years">1996-2010</div>
+                    <div class="count">1,175</div>
+                    <div class="label">films</div>
+                </div>
+                <div class="phase-card">
+                    <h3>Digital Era</h3>
+                    <div class="years">2011-2021</div>
+                    <div class="count">2,338</div>
+                    <div class="label">films</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Monthly Seasonality -->
+        <div class="chart-section">
+            <h2>Seasonal Release Patterns</h2>
+            <div class="chart-container small">
+                <canvas id="monthlyChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Genre Analysis -->
+        <div class="chart-section">
+            <h2>Genre Evolution by Decade</h2>
+            <div class="chart-container">
+                <canvas id="genreChart"></canvas>
+            </div>
+            <div class="phases-grid">
+                <div class="phase-card">
+                    <h3>Top Genre</h3>
+                    <div class="years">All Time</div>
+                    <div class="count">Drama</div>
+                    <div class="label">2,647 films</div>
+                </div>
+                <div class="phase-card">
+                    <h3>2010s Leader</h3>
+                    <div class="years">Peak Decade</div>
+                    <div class="count">Drama</div>
+                    <div class="label">1,391 films</div>
+                </div>
+                <div class="phase-card">
+                    <h3>Romance Growth</h3>
+                    <div class="years">2000s-2010s</div>
+                    <div class="count">2.2x</div>
+                    <div class="label">increase</div>
+                </div>
+                <div class="phase-card">
+                    <h3>Documentary Rise</h3>
+                    <div class="years">Steady Growth</div>
+                    <div class="count">403</div>
+                    <div class="label">in 2010s</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Language Distribution -->
+        <div class="chart-section">
+            <h2>Language Distribution</h2>
+            <p style="color: #6b7280; margin-bottom: 1rem; font-style: italic;">Showing top 12 languages by film count</p>
+            <div class="chart-container">
+                <canvas id="languageChart"></canvas>
+            </div>
+            <div class="phases-grid">
+                <div class="phase-card">
+                    <h3>English Dominance</h3>
+                    <div class="years">Primary Language</div>
+                    <div class="count">2,786</div>
+                    <div class="label">films (58%)</div>
+                </div>
+                <div class="phase-card">
+                    <h3>Spanish Films</h3>
+                    <div class="years">Second Most</div>
+                    <div class="count">393</div>
+                    <div class="label">films (8%)</div>
+                </div>
+                <div class="phase-card">
+                    <h3>French Cinema</h3>
+                    <div class="years">Third Place</div>
+                    <div class="count">363</div>
+                    <div class="label">films (7.6%)</div>
+                </div>
+                <div class="phase-card">
+                    <h3>Global Reach</h3>
+                    <div class="years">Total Languages</div>
+                    <div class="count">64</div>
+                    <div class="label">languages</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Popular Films Comparison -->
+        <div class="chart-section">
+            <h2>Most Popular Films: 20th vs 21st Century</h2>
+            <div class="findings-grid">
+                <div class="findings-section">
+                    <h3 class="purple">20th Century Classics</h3>
+                    <ul>
+                        <li>• <strong>1. American Beauty</strong> - Suburban mid-life crisis drama</li>
+                        <li>• <strong>2. Basic Instinct</strong> - Psychological thriller</li>
+                        <li>• <strong>3. Caligula</strong> - Historical epic drama</li>
+                        <li>• <strong>4. Clueless</strong> - Teen coming-of-age comedy</li>
+                        <li>• <strong>5. Interview with the Vampire</strong> - Gothic romance</li>
+                    </ul>
+                </div>
+                <div class="findings-section">
+                    <h3 class="pink">21st Century Hits</h3>
+                    <ul>
+                        <li>• <strong>1. Crush</strong> - Teen romantic comedy</li>
+                        <li>• <strong>2. Yes, No, or Maybe Half?</strong> - Animated romance</li>
+                        <li>• <strong>3. Given</strong> - Animated musical romance</li>
+                        <li>• <strong>4. Heart Shot</strong> - Contemporary drama</li>
+                        <li>• <strong>5. Call Me by Your Name</strong> - Coming-of-age romance</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Findings -->
+        <div class="chart-section">
+            <h2>Key Findings</h2>
+            <div class="findings-grid">
+                <div class="findings-section">
+                    <h3 class="purple">Historical Trends</h3>
+                    <ul>
+                        <li>• <strong>1960s breakthrough:</strong> Transition from sporadic releases to consistent production</li>
+                        <li>• <strong>1980s-90s surge:</strong> Coinciding with AIDS activism and increased visibility</li>
+                        <li>• <strong>2000s explosion:</strong> Digital filmmaking democratized production</li>
+                        <li>• <strong>2010s peak:</strong> Mainstream acceptance and streaming platforms</li>
+                        <li>• <strong>2020-2022 decline:</strong> COVID-19 impact on film industry</li>
+                    </ul>
+                </div>
+                <div class="findings-section">
+                    <h3 class="pink">Seasonal Patterns</h3>
+                    <ul>
+                        <li>• <strong>January peak:</strong> Sundance Film Festival and awards season launches</li>
+                        <li>• <strong>October second:</strong> Fall festival circuit and awards preparation</li>
+                        <li>• <strong>June third:</strong> Pride Month and summer festival season</li>
+                        <li>• <strong>December low:</strong> Holiday season shows lowest activity</li>
+                        <li>• <strong>Festival alignment:</strong> Releases timed to major film events</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data for charts
+        const yearlyData = [
+            {year: 1960, count: 1}, {year: 1961, count: 5}, {year: 1962, count: 2}, {year: 1963, count: 2}, {year: 1964, count: 5},
+            {year: 1965, count: 7}, {year: 1966, count: 5}, {year: 1967, count: 11}, {year: 1968, count: 13}, {year: 1969, count: 19},
+            {year: 1970, count: 18}, {year: 1971, count: 21}, {year: 1972, count: 16}, {year: 1973, count: 12}, {year: 1974, count: 13},
+            {year: 1975, count: 11}, {year: 1976, count: 12}, {year: 1977, count: 21}, {year: 1978, count: 12}, {year: 1979, count: 10},
+            {year: 1980, count: 23}, {year: 1981, count: 10}, {year: 1982, count: 23}, {year: 1983, count: 25}, {year: 1984, count: 14},
+            {year: 1985, count: 22}, {year: 1986, count: 25}, {year: 1987, count: 21}, {year: 1988, count: 22}, {year: 1989, count: 19},
+            {year: 1990, count: 13}, {year: 1991, count: 23}, {year: 1992, count: 24}, {year: 1993, count: 28}, {year: 1994, count: 34},
+            {year: 1995, count: 39}, {year: 1996, count: 52}, {year: 1997, count: 52}, {year: 1998, count: 56}, {year: 1999, count: 47},
+            {year: 2000, count: 52}, {year: 2001, count: 57}, {year: 2002, count: 73}, {year: 2003, count: 61}, {year: 2004, count: 104},
+            {year: 2005, count: 103}, {year: 2006, count: 81}, {year: 2007, count: 105}, {year: 2008, count: 118}, {year: 2009, count: 124},
+            {year: 2010, count: 129}, {year: 2011, count: 160}, {year: 2012, count: 170}, {year: 2013, count: 193}, {year: 2014, count: 227},
+            {year: 2015, count: 250}, {year: 2016, count: 281}, {year: 2017, count: 298}, {year: 2018, count: 334}, {year: 2019, count: 331},
+            {year: 2020, count: 348}, {year: 2021, count: 276}, {year: 2022, count: 83}
+        ];
+
+        const decadeData = [
+            {decade: '1880s', count: 1}, {decade: '1890s', count: 1}, {decade: '1900s', count: 2}, {decade: '1910s', count: 6},
+            {decade: '1920s', count: 2}, {decade: '1930s', count: 12}, {decade: '1940s', count: 3}, {decade: '1950s', count: 11},
+            {decade: '1960s', count: 70}, {decade: '1970s', count: 146}, {decade: '1980s', count: 204}, {decade: '1990s', count: 368},
+            {decade: '2000s', count: 878}, {decade: '2010s', count: 2373}, {decade: '2020s', count: 707}
+        ];
+
+        // Function to format numbers with commas
+        function formatNumber(num) {
+            return num.toLocaleString();
+        }
+
+        const monthlyData = [
+            {month: 'Jan', count: 618}, {month: 'Feb', count: 319}, {month: 'Mar', count: 408}, {month: 'Apr', count: 341},
+            {month: 'May', count: 386}, {month: 'Jun', count: 523}, {month: 'Jul', count: 322}, {month: 'Aug', count: 307},
+            {month: 'Sep', count: 426}, {month: 'Oct', count: 486}, {month: 'Nov', count: 390}, {month: 'Dec', count: 258}
+        ];
+
+        // Genre data for top 5 genres across decades
+        const genreData = {
+            labels: ['1960s', '1970s', '1980s', '1990s', '2000s', '2010s', '2020s'],
+            datasets: [
+                {
+                    label: 'Drama',
+                    data: [46, 87, 122, 192, 506, 1391, 390],
+                    borderColor: '#8b5cf6',
+                    backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                    tension: 0.1
+                },
+                {
+                    label: 'Romance',
+                    data: [13, 19, 36, 85, 252, 553, 184],
+                    borderColor: '#ec4899',
+                    backgroundColor: 'rgba(236, 72, 153, 0.1)',
+                    tension: 0.1
+                },
+                {
+                    label: 'Comedy',
+                    data: [7, 26, 38, 93, 237, 434, 110],
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    tension: 0.1
+                },
+                {
+                    label: 'Documentary',
+                    data: [8, 19, 32, 59, 114, 403, 130],
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    tension: 0.1
+                },
+                {
+                    label: 'Thriller',
+                    data: [7, 9, 10, 24, 38, 108, 27],
+                    borderColor: '#f59e0b',
+                    backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                    tension: 0.1
+                }
+            ]
+        };
+
+        // Language data (top 12 languages for better legend distribution)
+        const languageData = [
+            {language: 'English', count: 2786},
+            {language: 'Spanish', count: 393},
+            {language: 'French', count: 363},
+            {language: 'German', count: 197},
+            {language: 'Portuguese', count: 177},
+            {language: 'Japanese', count: 123},
+            {language: 'Italian', count: 102},
+            {language: 'Korean', count: 75},
+            {language: 'Chinese', count: 74},
+            {language: 'Tagalog', count: 68},
+            {language: 'Swedish', count: 59},
+            {language: 'Dutch', count: 52}
+        ];
+
+        // Yearly Chart
+        const yearlyCtx = document.getElementById('yearlyChart').getContext('2d');
+        new Chart(yearlyCtx, {
+            type: 'line',
+            data: {
+                labels: yearlyData.map(d => d.year),
+                datasets: [{
+                    label: 'Films per Year',
+                    data: yearlyData.map(d => d.count),
+                    borderColor: '#8b5cf6',
+                    backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                    borderWidth: 3,
+                    pointBackgroundColor: '#8b5cf6',
+                    pointBorderColor: '#8b5cf6',
+                    pointRadius: 2,
+                    tension: 0.1,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.parsed.y} films`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return formatNumber(value);
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        }
+                    }
+                },
+                onHover: (event, activeElements) => {
+                    event.native.target.style.cursor = activeElements.length > 0 ? 'pointer' : 'default';
+                }
+            }
+        });
+
+        // Decade Chart
+        const decadeCtx = document.getElementById('decadeChart').getContext('2d');
+        new Chart(decadeCtx, {
+            type: 'bar',
+            data: {
+                labels: decadeData.map(d => d.decade),
+                datasets: [{
+                    label: 'Films per Decade',
+                    data: decadeData.map(d => d.count),
+                    backgroundColor: '#ec4899',
+                    borderColor: '#ec4899',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${formatNumber(context.parsed.y)} films`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return formatNumber(value);
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Monthly Chart
+        const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+        new Chart(monthlyCtx, {
+            type: 'bar',
+            data: {
+                labels: monthlyData.map(d => d.month),
+                datasets: [{
+                    label: 'Films per Month',
+                    data: monthlyData.map(d => d.count),
+                    backgroundColor: '#3b82f6',
+                    borderColor: '#3b82f6',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${formatNumber(context.parsed.y)} films`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return formatNumber(value);
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Genre Evolution Chart
+        const genreCtx = document.getElementById('genreChart').getContext('2d');
+        new Chart(genreCtx, {
+            type: 'line',
+            data: genreData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.dataset.label}: ${formatNumber(context.parsed.y)} films`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return formatNumber(value);
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Language Distribution Chart
+        const languageCtx = document.getElementById('languageChart').getContext('2d');
+        new Chart(languageCtx, {
+            type: 'doughnut',
+            data: {
+                labels: languageData.map(d => d.language),
+                datasets: [{
+                    data: languageData.map(d => d.count),
+                    backgroundColor: [
+                        '#8b5cf6', '#ec4899', '#3b82f6', '#10b981', '#f59e0b',
+                        '#ef4444', '#6366f1', '#06b6d4', '#84cc16', '#f97316',
+                        '#8b5cf6', '#ec4899'
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#ffffff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'right',
+                        labels: {
+                            usePointStyle: true,
+                            padding: 15,
+                            font: {
+                                size: 11
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = ((context.parsed / total) * 100).toFixed(1);
+                                return `${context.label}: ${formatNumber(context.parsed)} films (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
