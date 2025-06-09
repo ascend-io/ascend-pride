@@ -35,6 +35,8 @@ decade_theme_agg AS (
     GROUP BY decade
 )
 
+SELECT * FROM decade_theme_agg
+
 -- -- Step 3: Summarize the most common themes for each decade
 -- SELECT
 --     decade,
