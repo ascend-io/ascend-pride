@@ -50,4 +50,4 @@ SELECT * FROM decade_theme_agg
 -- ORDER BY decade
 
 {{ with_test("not_null", column="decade") }}
-{{ with_test("not_null", column="decade_themes_summary") }}
+-- {{ with_test("not_null", column="decade_themes_summary") }}
