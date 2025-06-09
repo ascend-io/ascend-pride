@@ -35,12 +35,14 @@ decade_theme_agg AS (
     GROUP BY decade
 )
 
+-- SELECT * FROM decade_theme_agg
+
 -- Step 3: Summarize the most common themes for each decade
 SELECT
     decade,
     SNOWFLAKE.CORTEX.SUMMARIZE(
         'Given the following list of movie themes from the ' || decade || 's, summarize the most common themes of this decade: ' ||
-        LEFT(all_film_themes, 10000) || 
+        LEFT(all_film_themes, 9000) || 
         'Reference specific films only in parenthesis and follow this format: The 1950s saw a range of movie themes, including technology and rebellion ("The Mechanical Brain"), exploration of sexuality and identity ("The Trans Woman" and "Olivia"), housewifery and relationships ("The Inexperienced Housewife"), and moral dilemmas and crises of faith ("The Vicar of Bellington" and "A Double Life"). Other themes included communication between prisoners, cover-ups, and escapes.'
     ) AS decade_themes_summary,
     num_films

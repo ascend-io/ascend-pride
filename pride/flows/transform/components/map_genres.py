@@ -43,8 +43,11 @@ def map_genres(read_films, read_genres, context: ComponentExecutionContext):
         pl.col("RELEASE_DATE").is_not_null() & pl.col("OVERVIEW").is_not_null()
     )
 
-    # Log columns to debug some column handling errors
-    log(f"Columns in films_df: {films_df.columns}")
+    # Verbose logging: columns, dtypes, shape, and head
+    log(f"[map_genres] Initial films_df columns: {films_df.columns}")
+    log(f"[map_genres] Initial films_df dtypes: {[str(dt) for dt in films_df.dtypes]}")
+    log(f"[map_genres] Initial films_df shape: {films_df.shape}")
+    log(f"[map_genres] Initial films_df head: {films_df.head(5).to_pandas().to_dict(orient='list')}")
     
     # Step 1: Clean and split genre_ids string into list of integers with proper edge case handling
     films_df = films_df.with_columns(
@@ -98,4 +101,60 @@ def map_genres(read_films, read_genres, context: ComponentExecutionContext):
         pl.col("genre_name").fill_null(pl.lit([], dtype=pl.List(pl.Utf8)))
     )
 
-    return films_df.to_pandas()
+    # Ensure output DataFrame always has the expected columns, even if empty
+    expected_columns = [
+        "OVERVIEW", "RELEASE_DATE", "ORIGINAL_TITLE", "genre_ids", "genre_name"
+    ]
+    # Add any missing columns as empty columns
+    for col in expected_columns:
+        if col not in films_df.columns:
+            # Use empty string or empty list as appropriate
+            if col == "genre_name":
+                films_df = films_df.with_columns(pl.lit([], dtype=pl.List(pl.Utf8)).alias(col))
+            elif col == "genre_ids":
+                films_df = films_df.with_columns(pl.lit([], dtype=pl.List(pl.Int64)).alias(col))
+            else:
+                films_df = films_df.with_columns(pl.lit(None).alias(col))
+
+    # Reorder columns to match expected order
+    films_df = films_df.select([col for col in expected_columns if col in films_df.columns])
+
+    # Verbose logging after all column manipulations
+    log(f"[map_genres] Final films_df columns: {films_df.columns}")
+    log(f"[map_genres] Final films_df dtypes: {[str(dt) for dt in films_df.dtypes]}")
+    log(f"[map_genres] Final films_df shape: {films_df.shape}")
+    log(f"[map_genres] Final films_df head: {films_df.head(5).to_pandas().to_dict(orient='list')}")
+
+    # Check for empty DataFrame
+    if films_df.height == 0:
+        log("[map_genres][WARNING] Output DataFrame is empty!")
+
+    # Check for duplicate columns
+    from collections import Counter
+    col_counts = Counter(films_df.columns)
+    dups = [col for col, count in col_counts.items() if count > 1]
+    if dups:
+        log(f"[map_genres][WARNING] Duplicate columns found: {dups}")
+
+    # Check for missing expected columns
+    missing = [col for col in expected_columns if col not in films_df.columns]
+    if missing:
+        log(f"[map_genres][WARNING] Missing expected columns: {missing}")
+
+    # Convert to pandas and ensure columns are present even if empty
+    result_df = films_df.to_pandas()
+    # Verbose logging for pandas DataFrame
+    log(f"[map_genres] Pandas result_df columns: {list(result_df.columns)}")
+    log(f"[map_genres] Pandas result_df dtypes: {result_df.dtypes.to_dict()}")
+    log(f"[map_genres] Pandas result_df shape: {result_df.shape}")
+    log(f"[map_genres] Pandas result_df head: {result_df.head(5).to_dict(orient='list')}")
+    for col in expected_columns:
+        if col not in result_df.columns:
+            if col == "genre_name":
+                result_df[col] = [[]] * len(result_df)
+            else:
+                result_df[col] = None
+    # Final check for empty DataFrame
+    if result_df.shape[0] == 0:
+        log("[map_genres][WARNING] Final output pandas DataFrame is empty!")
+    return result_df
