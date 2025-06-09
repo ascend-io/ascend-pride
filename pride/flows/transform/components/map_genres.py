@@ -103,7 +103,7 @@ def map_genres(read_films, read_genres, context: ComponentExecutionContext):
 
     # Ensure output DataFrame always has the expected columns, even if empty
     expected_columns = [
-        "OVERVIEW", "RELEASE_DATE", "ORIGINAL_TITLE", "GENRE_IDS", "genre_ids", "genre_name"
+        "OVERVIEW", "RELEASE_DATE", "ORIGINAL_TITLE", "genre_ids", "genre_name"
     ]
     # Add any missing columns as empty columns
     for col in expected_columns:
