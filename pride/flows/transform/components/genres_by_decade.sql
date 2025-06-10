@@ -14,7 +14,7 @@ genre_counts AS (
     g.value::STRING AS genre_name,
     COUNT(DISTINCT ORIGINAL_TITLE) AS film_count
     FROM films_with_decade,
-        LATERAL FLATTEN(input => "genre_name") g
+        LATERAL FLATTEN(input => genre_name) g
     WHERE g.value IS NOT NULL
     GROUP BY decade, g.value::STRING
 ),
