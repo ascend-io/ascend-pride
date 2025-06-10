@@ -2,4 +2,4 @@ profile:
   parameters:
     snowflake:
       $<: $parameters.data_planes.snowflake
-      schema: DEFAULT
+      schema: WORKSPACE_SHIFRA
