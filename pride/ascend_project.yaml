@@ -19,10 +19,10 @@ project:
     data_planes:
       snowflake:
         account: ASCENDPARTNER
-        user: ASCEND_PRIDE_DEV
-        role: ASCEND_PRIDE_DEV
-        warehouse: ASCEND_PRIDE_DEV
-        database: ASCEND_PRIDE_DEV
+        user: ASCEND_PRIDE_DEV_SHIFRA
+        role: ASCEND_PRIDE_DEV_SHIFRA
+        warehouse: ASCEND_PRIDE_DEV_SHIFRA
+        database: ASCEND_PRIDE_DEV_SHIFRA
         schema: DEFAULT
         max_concurrent_queries: 20
   # defaults are typically used to specify the default Data Plane Connection
