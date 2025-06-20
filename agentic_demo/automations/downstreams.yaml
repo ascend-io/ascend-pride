@@ -3,15 +3,11 @@ automation:
   name: downstreams
   triggers:
     events:
-      - sql_filter: json_extract_string(event, '$.data.flow') = 'transform'
+      - sql_filter: json_extract_string(event, '$.data.flow') = 'extract-load'
         types:
           - FlowRunSuccess
   actions:
     - type: run_flow
-      name: run-metrics
+      name: run-transform
       config:
-        flow: metrics
-    - type: run_flow
-      name: run-llm
-      config:
-        flow: llm
+        flow: transform-demo
