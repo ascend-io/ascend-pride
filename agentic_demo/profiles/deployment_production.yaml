@@ -1,0 +1,10 @@
+profile:
+  parameters:
+    snowflake:
+      account: ASCENDPARTNER
+      user: ASCEND_PRIDE_PRODUCTION
+      role: ASCEND_PRIDE_PRODUCTION
+      warehouse: ASCEND_PRIDE_PRODUCTION
+      database: ASCEND_PRIDE_PRODUCTION
+      schema: DEFAULT
+      max_concurrent_queries: 20
