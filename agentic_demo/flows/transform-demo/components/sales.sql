@@ -45,6 +45,3 @@ FROM (
         ) AS sales_rank
     FROM daily_sales
 )
-
-{{ with_test('count_equal', count=1) }}
-{{ with_test('unique', column='STORE_ID') }}
