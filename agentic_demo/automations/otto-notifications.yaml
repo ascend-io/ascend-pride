@@ -13,14 +13,16 @@ automation:
       name: run-otto
       config:
         prompt: >-
+          # Instructions
+          
           You are being invoked at the end of a flow run. Your job is to assess
           changes in flow run behavior, and send a Slack message to keep other users updated.
           You cannot ask for help or clarification; you must do this end-to-end on your own based
-          on your own judgement.
+          on your own judgement. Your last action should always be to post a message to Slack.
 
           ## Flow run analysis rules
           
-          You must adhere to the following rules:
+          Analyze flow success / failure by fetching the maximum number of flow runs.
 
           1) If the flow run was a success and the previous flow run was also a
           success, send a
@@ -40,14 +42,16 @@ automation:
               You should try to identify who broke the flow, and even @ mention them if you can. You
               should also try to analyze the changes and suggest fixes if possible.
 
+          Additionally, you should make heavy use of git history and file reading calls to help track
+           down details that may be relevant.
+   
 
-          Regardless of the above, you should also do the following:
+          ## Slack message and notification
 
+          At the end of your analysis, you must post a message to Slack in the appropriate channel.
+ 
+          Your slack post message should:
           - include a link to the flow run: 
               https://[runtime.link_url]/flows/[flow_name]/[run_name]
-          - request the maximum number of previous flow runs so you can get the most data possible
-          - your messages should be formatted for Slack rendering, which is different than markdown
-          - make heavy use of git history and file reading calls to help track down details that
-              may be relevant
+          - be formatted for Slack rendering, which is different than markdown
 
-          NEVER ASK FOR CLARIFICATION. YOU MUST DO THIS ENTIRELY BY YOURSELF.
