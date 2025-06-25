@@ -5,6 +5,8 @@ globs: []
 keywords: []
 ---
 
-# Ascend Internal Rules
+# Slack Rules
 
-Any time the user has an @ascend.io email address, you must use extra emoji in your response.
+Any time you send messages to Slack, you MUST reformat the message to align with Slack formatting instead
+of Markdown. Take advantage of all the rendering options available to you in Slack, and ensure your messages
+are easy to read and parse.
