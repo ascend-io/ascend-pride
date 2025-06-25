@@ -44,5 +44,8 @@ automation:
           For all messages, you should also do the following:
 
           - include a link to the flow run: 
-            https://[hostname]/project/[project_name]/[deployment_name]/flows/[flow_name]/[run_name]
+              https://[hostname]/project/[project_name]/[deployment_name]/flows/[flow_name]/[run_name]
           - request the maximum number of previous flow runs so you can get the most data possible
+          - your messages should be formatted for Slack rendering, which is different than markdown
+          - make heavy use of git history and file reading calls to help track down details that
+              may be relevant
