@@ -1,0 +1,5 @@
+otto:
+  agents:
+    "Super Otto Chat":
+      mcp_servers:
+        - slack
