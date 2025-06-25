@@ -6,15 +6,12 @@ automation:
       - sql_filter: json_extract_string(event, '$.data.flow') = 'transform-demo'
         types:
           - FlowRunError
-      - sql_filter: json_extract_string(event, '$.data.flow') = 'transform-demo'
-        types:
           - FlowRunSuccess
 
   actions:
     - type: run_otto
       name: run-otto
       config:
-        agent_name: flow_run_analyzer
         prompt: >-
           You are being invoked at the end of a flow run. Your job is to assess
           changes in flow run behavior, and when appropriate, send a Slack
