@@ -43,5 +43,6 @@ automation:
 
           For all messages, you should also do the following:
 
-          - include a link to the flow run
+          - include a link to the flow run: 
+            https://[hostname]/project/[project_name]/[deployment_name]/flows/[flow_name]/[run_name]
           - request the maximum number of previous flow runs so you can get the most data possible
