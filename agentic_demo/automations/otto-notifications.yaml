@@ -3,7 +3,7 @@ automation:
   enabled: true
   triggers:
     events:
-      - sql_filter: json_extract_string(event, '$.data.flow') = 'transform-duckdb'
+      - sql_filter: json_extract_string(event, '$.data.flow') = 'transform-demo'
         types:
           - FlowRunFailure
           - FlowRunSuccess
