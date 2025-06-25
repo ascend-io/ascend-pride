@@ -1,11 +1,11 @@
 ---
 agent:
   name: Otto Flow Run Analyzer
+  mcp_servers:
+    - slack
   model: o4-mini
   model_settings:
     reasoning: low
-  mcp_servers:
-    - slack
   tools:
     - "*"
 ---
