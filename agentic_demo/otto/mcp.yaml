@@ -2,6 +2,8 @@ mcpServers:
   slack:
     command: npx
     args:
+      - --cache
+      - /tmp/npm-cache
       - -y
       - "@modelcontextprotocol/server-slack"
     env:
