@@ -1,8 +1,11 @@
 ---
 agent:
-  name: 🧑‍🏫 The Professor
-  model: gpt-4.1-mini
-  temperature: 0.4
+  name: Otto Flow Run Analyzer
+  model: o4-mini
+  model_settings:
+    reasoning: low
+  mcp_servers:
+    - slack
   tools:
     - "*"
 ---
