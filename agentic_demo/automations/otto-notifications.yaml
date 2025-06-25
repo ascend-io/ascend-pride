@@ -46,3 +46,5 @@ automation:
           - your messages should be formatted for Slack rendering, which is different than markdown
           - make heavy use of git history and file reading calls to help track down details that
               may be relevant
+
+          NEVER ASK FOR CLARIFICATION. YOU MUST DO THIS ENTIRELY BY YOURSELF.
