@@ -44,3 +44,4 @@ automation:
           For all messages, you should also do the following:
 
           - include a link to the flow run
+          - request the maximum number of previous flow runs so you can get the most data possible
