@@ -1,0 +1,36 @@
+automation:
+  name: call-otto
+  enabled: true
+  triggers:
+    events:
+      - sql_filter: json_extract_string(event, '$.data.flow') = 'transform-duckdb'
+        types:
+          - FlowRunFailure
+          - FlowRunSuccess
+  actions:
+    - type: run_otto
+      name: run-otto
+      config:
+        agent_name: flow_run_analyzer
+        prompt: >-
+          You must follow these steps:
+
+          1) Use your tools to get the most recent flow run history for the
+          entire flow. 
+
+          2) Analyze the start & end times of every component; use the top level
+          stop and end times, not the sub-process times for tests, planning, etc
+
+          3) Research why they may be the slowest compared to the other
+          components (feel free to read their files and look at their code)
+
+          4) Find the 5 slowest components, and put their times in a table
+          ordered slowest to fastest, along with an analysis of the slowness.
+
+          5) Send a properly formatted Slack message to
+          #ottos-expedtitions-alerts with this detail. You can list channels
+          first to find the right channel id. Make note to format things like
+          tables in ways that actually work in Slack.
+
+
+          DO NOT STOP UNTIL YOU SEND A MESSAGE TO SLACK.
