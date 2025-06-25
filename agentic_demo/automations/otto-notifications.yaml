@@ -14,8 +14,9 @@ automation:
       config:
         prompt: >-
           You are being invoked at the end of a flow run. Your job is to assess
-          changes in flow run behavior, and when appropriate, send a Slack
-          message to keep other users updated.
+          changes in flow run behavior, and send a Slack message to keep other users updated.
+          You cannot ask for help or clarification; you must do this end-to-end on your own based
+          on your own judgement.
 
           You must adhere to the following rules:
 
