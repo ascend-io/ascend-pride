@@ -9,6 +9,7 @@ automation:
       - sql_filter: json_extract_string(event, '$.data.flow') = 'transform-demo'
         types:
           - FlowRunSuccess
+
   actions:
     - type: run_otto
       name: run-otto
