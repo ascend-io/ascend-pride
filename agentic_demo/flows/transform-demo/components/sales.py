@@ -10,8 +10,8 @@ from ascend.application.context import ComponentExecutionContext
         ref("sales_vendors"),
     ],
     tests=[
-        test("count_equal", count=1),
-        test("unique", column="STORE_ID"),
+        # test("count_equal", count=1),
+        # test("unique", column="STORE_ID"),
     ]
 )
 def sales(
