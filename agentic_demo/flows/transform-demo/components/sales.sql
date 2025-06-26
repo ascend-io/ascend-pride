@@ -45,5 +45,5 @@ SELECT
         ORDER BY total_sales DESC
         ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
     ) AS sales_rank
-FROM daily_sales
+FROM daily_sales_doesnt_exist
 ORDER BY STORE_ID, SALE_DATE
