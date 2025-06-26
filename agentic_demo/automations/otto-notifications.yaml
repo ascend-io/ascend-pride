@@ -54,4 +54,5 @@ automation:
           - include a link to the flow run: 
               https://[runtime.link_url]/flows/[flow_name]/[run_name]
           - be formatted for Slack rendering, which is different than markdown
+          - when @ mentioning users, look up their profile so you can reference their actual id
 
