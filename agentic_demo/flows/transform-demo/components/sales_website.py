@@ -1,7 +1,7 @@
+import ascend_project_code.transform as T
 import ibis
-
-from ascend.resources import ref, transform, test
 from ascend.application.context import ComponentExecutionContext
+from ascend.resources import ref, test, transform
 
 
 @transform(
@@ -18,9 +18,5 @@ from ascend.application.context import ComponentExecutionContext
 def sales_website(
     read_sales_website: ibis.Table, context: ComponentExecutionContext
 ) -> ibis.Table:
-    # Inline the cleaning logic
-    if ibis.get_backend(read_sales_website).name == "snowflake":
-        cleaned = read_sales_website.rename("ALL_CAPS").distinct()
-    else:
-        cleaned = read_sales_website.rename("snake_case").distinct()
-    return cleaned
+    sales_website = T.clean(read_sales_website)
+    return sales_website

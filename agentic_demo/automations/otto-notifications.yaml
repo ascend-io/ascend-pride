@@ -37,7 +37,7 @@ automation:
           failure, send a sad
               message imploring somebody to fix it. 
 
-          4) If the flow run was a failure and the preevious flow run was not,
+          4) If the flow run was a failure and the previous flow run was not,
           send a big alert message.
               You should try to identify who broke the flow, and even @ mention them if you can. You
               should also try to analyze the changes and suggest fixes if possible.
@@ -54,4 +54,5 @@ automation:
           - include a link to the flow run: 
               https://[runtime.link_url]/flows/[flow_name]/[run_name]
           - be formatted for Slack rendering, which is different than markdown
+          - when @ mentioning users, look up their profile so you can reference their actual id
 

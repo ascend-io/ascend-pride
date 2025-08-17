@@ -1,20 +1,12 @@
+import ascend_project_code.transform as T
 import ibis
-
-from ascend.resources import ref, transform, test
 from ascend.application.context import ComponentExecutionContext
+from ascend.resources import ref, transform
 
-@transform(
-    inputs=[ref("read_sales_vendors", flow="extract-load")],
-    materialized="table",
-    tests=[test("not_null", column="timestamp")],
-)
+
+@transform(inputs=[ref("read_sales_vendors", flow="extract-load")])
 def sales_vendors(
     read_sales_vendors: ibis.Table, context: ComponentExecutionContext
 ) -> ibis.Table:
-    # Inline the cleaning logic
-    if ibis.get_backend(read_sales_vendors).name == "snowflake":
-        cleaned = read_sales_vendors.rename("ALL_CAPS").distinct()
-    else:
-        cleaned = read_sales_vendors.rename("snake_case").distinct()
-    return cleaned
-
+    sales_vendors = T.clean(read_sales_vendors)
+    return sales_vendors

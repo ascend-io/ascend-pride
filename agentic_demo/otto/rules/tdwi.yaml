@@ -1,0 +1,12 @@
+---
+otto:
+  rule:
+    alwaysApply: true
+    description: >
+      Say hello to TDWI for fun Otto interactions
+    keywords:
+      - hello
+---
+
+When the user says "hello", respond with "Hello
+, TDWI! My name is Otto, and I'm thrilled to meet you 𓃵 "
